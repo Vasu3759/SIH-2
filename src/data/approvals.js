@@ -1,0 +1,263 @@
+export const approvalsDatabase = [
+  {
+    id: "app-business-reg",
+    name: "Business / Entity Registration",
+    category: "Corporate & Legal",
+    department: "Registrar of Companies (ROC) / MCA",
+    statutoryAct: "Companies Act, 2013 / LLP Act",
+    stage: "Pre-Establishment",
+    status: "Approved",
+    isParallel: false,
+    prerequisites: [],
+    whyRequired: "Mandatory foundation to establish the legal entity, acquire corporate identity, and execute commercial agreements in India.",
+    documents: [
+      { name: "Certificate of Incorporation", required: true, uploaded: true, valid: true },
+      { name: "Memorandum of Association (MOA)", required: true, uploaded: true, valid: true },
+      { name: "Articles of Association (AOA)", required: true, uploaded: true, valid: true },
+      { name: "Company PAN & TAN", required: true, uploaded: true, valid: true },
+      { name: "Registered Office Proof", required: true, uploaded: true, valid: true },
+      { name: "Director / Partner Identification (DIN/KYC)", required: true, uploaded: true, valid: true }
+    ],
+    estimatedTime: "Prototype estimate: 5–7 working days",
+    officialPortal: "MCA Portal (mca.gov.in)"
+  },
+  {
+    id: "app-udyam",
+    name: "Udyam / MSME Registration",
+    category: "Corporate & Legal",
+    department: "Ministry of MSME, Govt of India",
+    statutoryAct: "MSMED Act, 2006",
+    stage: "Pre-Establishment",
+    status: "Approved",
+    isParallel: true,
+    prerequisites: ["app-business-reg"],
+    whyRequired: "Enables MSME classification benefits, priority sector credit lending, collateral concessions, and state industrial subsidy eligibility.",
+    documents: [
+      { name: "Aadhaar of Authorised Signatory", required: true, uploaded: true, valid: true },
+      { name: "Company PAN Card", required: true, uploaded: true, valid: true },
+      { name: "GSTIN Certificate", required: true, uploaded: true, valid: true },
+      { name: "Plant & Machinery Investment CA Certificate", required: true, uploaded: true, valid: true }
+    ],
+    estimatedTime: "Prototype estimate: 1–2 working days",
+    officialPortal: "Udyam Registration Portal (udyamregistration.gov.in)"
+  },
+  {
+    id: "app-gst",
+    name: "GST Registration",
+    category: "Taxation",
+    department: "State & Central GST Department",
+    statutoryAct: "CGST & SGST Act, 2017",
+    stage: "Pre-Establishment",
+    status: "Approved",
+    isParallel: true,
+    prerequisites: ["app-business-reg"],
+    whyRequired: "Mandatory for commercial sales, inter-state supply, raw material procurement, and input tax credit claims.",
+    documents: [
+      { name: "PAN Card of Entity", required: true, uploaded: true, valid: true },
+      { name: "Authorised Signatory Aadhaar & Photo", required: true, uploaded: true, valid: true },
+      { name: "Business Constitution Proof", required: true, uploaded: true, valid: true },
+      { name: "Principal Place of Business Proof (Lease/Deed)", required: true, uploaded: true, valid: true },
+      { name: "Electricity / Property Tax Receipt", required: true, uploaded: true, valid: true },
+      { name: "Bank Account Details & Cancelled Cheque", required: true, uploaded: true, valid: true }
+    ],
+    estimatedTime: "Prototype estimate: 3–5 working days",
+    officialPortal: "GST Portal (gst.gov.in)"
+  },
+  {
+    id: "app-land",
+    name: "Land Possession & Allotment Permission",
+    category: "Land & Infrastructure",
+    department: "Maharashtra Industrial Development Corporation (MIDC) / Revenue Dept",
+    statutoryAct: "MIDC Act, 1961 / MLRC",
+    stage: "Site Acquisition",
+    status: "Approved",
+    isParallel: false,
+    prerequisites: ["app-business-reg"],
+    whyRequired: "Establishes legal title, zoning compliance for industrial use, and right to construct on designated plot.",
+    documents: [
+      { name: "MIDC Allotment / Lease Agreement", required: true, uploaded: true, valid: true },
+      { name: "7/12 Extract / Property Card", required: true, uploaded: true, valid: true },
+      { name: "Possession Receipt & Demarcation Certificate", required: true, uploaded: true, valid: true },
+      { name: "Site Plan showing Boundary Coordinates", required: true, uploaded: true, valid: true },
+      { name: "Zoning & Land Use NOC", required: true, uploaded: true, valid: true }
+    ],
+    estimatedTime: "Prototype estimate: 15–20 working days",
+    officialPortal: "MAITRI Single Window (maitri.mahaonline.gov.in)"
+  },
+  {
+    id: "app-building",
+    name: "Building / Planning Permission",
+    category: "Construction & Infrastructure",
+    department: "MIDC Special Planning Authority (SPA) / Town Planning",
+    statutoryAct: "MRTP Act, 1966 & Standard DCR",
+    stage: "Design & Construction",
+    status: "Approved",
+    isParallel: false,
+    prerequisites: ["app-land"],
+    whyRequired: "Statutory authorization for architectural designs, structural integrity, setback clearances, and construction commencement.",
+    documents: [
+      { name: "Land Lease / Ownership Deed", required: true, uploaded: true, valid: true },
+      { name: "Architectural Drawings (Floor, Elevation, Section)", required: true, uploaded: true, valid: true },
+      { name: "Site Plan & Block Plan", required: true, uploaded: true, valid: true },
+      { name: "Structural Engineer Stability Certificate", required: true, uploaded: true, valid: true },
+      { name: "Development Proposal & Area Calculations", required: true, uploaded: true, valid: true }
+    ],
+    estimatedTime: "Prototype estimate: 20–30 working days",
+    officialPortal: "AutoDCR / BPAMS Portal"
+  },
+  {
+    id: "app-mpcb-cte",
+    name: "MPCB Consent to Establish (CTE)",
+    category: "Environmental",
+    department: "Maharashtra Pollution Control Board (MPCB)",
+    statutoryAct: "Water Act 1974 & Air Act 1981",
+    stage: "Pre-Construction",
+    status: "Under Review",
+    isParallel: true,
+    prerequisites: ["app-land"],
+    whyRequired: "Mandatory environmental clearance before initiating civil construction or equipment installation for Orange/Red category units.",
+    documents: [
+      { name: "Chartered Accountant Gross Capital Investment Certificate", required: true, uploaded: true, valid: true },
+      { name: "Manufacturing Process Flow Chart & Material Balance", required: true, uploaded: true, valid: true },
+      { name: "Effluent & Air Emission Treatment Scheme Proposal", required: true, uploaded: true, valid: true },
+      { name: "Water Balance Diagram", required: true, uploaded: true, valid: true },
+      { name: "Land Ownership / Lease Allotment Copy", required: true, uploaded: true, valid: true },
+      { name: "Local Authority Planning NOC", required: true, uploaded: true, valid: true }
+    ],
+    estimatedTime: "Prototype estimate: 30–45 working days",
+    officialPortal: "MPCB e-Consent Portal (mpcb.gov.in)"
+  },
+  {
+    id: "app-fire-noc",
+    name: "Fire Provisional NOC",
+    category: "Safety & Emergency",
+    department: "Maharashtra Fire & Emergency Services",
+    statutoryAct: "Maharashtra Fire Prevention & Life Safety Act, 2006",
+    stage: "Pre-Construction",
+    status: "Inspection",
+    isParallel: true,
+    prerequisites: ["app-land", "app-building"],
+    whyRequired: "Ensures proposed architectural layout adheres to National Building Code (NBC) fire hydrant, egress, and safety buffer standards.",
+    documents: [
+      { name: "Authorised Signatory Application & Board Resolution", required: true, uploaded: true, valid: true },
+      { name: "Architectural Drawings with Fire Escape Routes", required: true, uploaded: true, valid: true },
+      { name: "Block Plan showing Transformer & Raw Material Storage", required: true, uploaded: true, valid: true },
+      { name: "Industrial Process Flow & Combustible Material List", required: true, uploaded: true, valid: true },
+      { name: "Fire Hydrant / Sprinkler Specification Blueprint", required: true, uploaded: true, valid: true },
+      { name: "HVAC & Fire Damper System Details", required: true, uploaded: true, valid: true },
+      { name: "Architect Fire Safety Certification", required: true, uploaded: true, valid: true },
+      { name: "Government Challan Fee Receipt", required: true, uploaded: false, valid: false }
+    ],
+    estimatedTime: "Prototype estimate: 14–21 working days",
+    officialPortal: "Maharashtra Fire Services Portal"
+  },
+  {
+    id: "app-factory-licence",
+    name: "Factory Plan Approval & Factory Licence",
+    category: "Labour & Safety",
+    department: "Directorate of Industrial Safety & Health (DISH), Maharashtra Labour Dept",
+    statutoryAct: "Factories Act, 1948 (Section 6 & 7)",
+    stage: "Setup & Pre-Commissioning",
+    status: "Action Required",
+    isParallel: false,
+    prerequisites: ["app-building", "app-fire-noc", "app-mpcb-cte"],
+    whyRequired: "Mandatory statutory license for factories employing >10 workers with power (or >20 without power) ensuring worker safety, ventilation, and structural stability.",
+    documents: [
+      { name: "Factory Master Plan & Machine Layout", required: true, uploaded: true, valid: false, note: "Survey coordinate discrepancy flagged" },
+      { name: "Site Plan showing Distances from Surrounding Plots", required: true, uploaded: true, valid: true },
+      { name: "Manufacturing Process Narrative & Flow Diagram", required: true, uploaded: true, valid: true },
+      { name: "Raw Material & Finished Goods Chemical Specification", required: true, uploaded: true, valid: true },
+      { name: "Machinery HP & Electrical Connected Load Schedule", required: true, uploaded: true, valid: true },
+      { name: "Sanitary & Worker Welfare Facilities Layout", required: true, uploaded: false, valid: false },
+      { name: "Competent Person Structural Stability Certificate", required: true, uploaded: false, valid: false },
+      { name: "Safety Management Plan & First Aid Provisions", required: true, uploaded: false, valid: false }
+    ],
+    estimatedTime: "Prototype estimate: 20–30 working days",
+    officialPortal: "DISH Maharashtra (dish.maharashtra.gov.in)"
+  },
+  {
+    id: "app-fssai",
+    name: "FSSAI Food Manufacturing Licence",
+    category: "Food Safety",
+    department: "Food Safety and Standards Authority of India (FSSAI)",
+    statutoryAct: "FSS Act, 2006 & FoSCoS Regulations",
+    stage: "Pre-Operations",
+    status: "Under Review",
+    isParallel: true,
+    prerequisites: ["app-business-reg", "app-mpcb-cte"],
+    whyRequired: "Compulsory registration/licensing for manufacturing, blending, packing, or storing food items with food safety audits.",
+    documents: [
+      { name: "Form B Application & Business Structure Proof", required: true, uploaded: true, valid: true },
+      { name: "Factory Floor Layout with Hygiene Zoning", required: true, uploaded: true, valid: true },
+      { name: "List of Machinery & Installed Capacity", required: true, uploaded: true, valid: true },
+      { name: "Product Category & Ingredient Formulation List", required: true, uploaded: true, valid: true },
+      { name: "NABL Accredited Laboratory Potable Water Test Report", required: true, uploaded: true, valid: true },
+      { name: "Food Safety Management System (FSMS) Plan", required: true, uploaded: true, valid: true },
+      { name: "Nomination of Authorised Food Safety Officer", required: true, uploaded: true, valid: true }
+    ],
+    estimatedTime: "Prototype estimate: 15–25 working days",
+    officialPortal: "FoSCoS Portal (foscos.fssai.gov.in)"
+  },
+  {
+    id: "app-electricity",
+    name: "Industrial Electricity Connection (HT/LT)",
+    category: "Utilities & Power",
+    department: "Maharashtra State Electricity Distribution Co. Ltd. (MSEDCL)",
+    statutoryAct: "Electricity Act, 2003 & Supply Code",
+    stage: "Commissioning",
+    status: "Not Started",
+    isParallel: true,
+    prerequisites: ["app-land", "app-building"],
+    whyRequired: "Provides industrial power supply, transformer installation sanction, and tariff categorization.",
+    documents: [
+      { name: "Ownership / Lease Agreement of Premise", required: true, uploaded: false, valid: false },
+      { name: "Approved Building / Layout Plan", required: true, uploaded: false, valid: false },
+      { name: "Sanctioned Load & Connected Machinery Calculation Sheet", required: true, uploaded: false, valid: false },
+      { name: "Licensed Electrical Contractor Wiring Test Certificate", required: true, uploaded: false, valid: false },
+      { name: "Electrical Inspectorate Installation Safety Sanction", required: true, uploaded: false, valid: false }
+    ],
+    estimatedTime: "Prototype estimate: 15–20 working days",
+    officialPortal: "MSEDCL Consumer Portal"
+  },
+  {
+    id: "app-mpcb-cto",
+    name: "MPCB Consent to Operate (CTO)",
+    category: "Environmental",
+    department: "Maharashtra Pollution Control Board (MPCB)",
+    statutoryAct: "Water Act 1974 & Air Act 1981",
+    stage: "Pre-Operations",
+    status: "Not Started",
+    isParallel: false,
+    prerequisites: ["app-mpcb-cte", "app-factory-licence", "app-fire-noc"],
+    whyRequired: "Final environmental authorization to commence commercial production following compliance verification of installed ETP/APCD units.",
+    documents: [
+      { name: "Copy of previously granted Consent to Establish (CTE)", required: true, uploaded: false, valid: false },
+      { name: "Chartered Accountant Final Capital Investment Certificate", required: true, uploaded: false, valid: false },
+      { name: "Effluent Treatment Plant (ETP) Commissioning Report", required: true, uploaded: false, valid: false },
+      { name: "Air Pollution Control Equipment Installation Proof", required: true, uploaded: false, valid: false },
+      { name: "Environmental Monitoring & Baseline Analysis Report", required: true, uploaded: false, valid: false }
+    ],
+    estimatedTime: "Prototype estimate: 30–45 working days",
+    officialPortal: "MPCB e-Consent Portal"
+  },
+  {
+    id: "app-incentives",
+    name: "Maharashtra Package Scheme of Incentives (PSI 2019)",
+    category: "Financial Subsidies & Incentives",
+    department: "Directorate of Industries, Govt of Maharashtra",
+    statutoryAct: "Industrial Policy of Maharashtra 2019",
+    stage: "Financial Sanction",
+    status: "Eligible / Not Applied",
+    isParallel: true,
+    prerequisites: ["app-udyam", "app-mpcb-cte"],
+    whyRequired: "Avails 40%–60% Capital Subsidy on fixed assets, SGST Reimbursement for 7 years, Interest Subvention @5%, and Electricity Duty Exemption.",
+    documents: [
+      { name: "Detailed Project Report (DPR) approved by Bank", required: true, uploaded: true, valid: true },
+      { name: "Udyam Registration Certificate", required: true, uploaded: true, valid: true },
+      { name: "Land Possession & Construction Invoices", required: true, uploaded: false, valid: false },
+      { name: "Bank Term Loan Sanction Letter", required: true, uploaded: false, valid: false }
+    ],
+    estimatedTime: "Prototype estimate: 45–60 working days",
+    officialPortal: "MAITRI Directorate of Industries"
+  }
+];
