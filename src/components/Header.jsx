@@ -9,7 +9,9 @@ import {
   Layers, 
   ChevronDown,
   FileText,
-  ExternalLink
+  ExternalLink,
+  Menu,
+  X
 } from 'lucide-react';
 
 export default function Header({ 
@@ -19,7 +21,9 @@ export default function Header({
   onSelectProject, 
   onNavigate,
   onResetData,
-  showToast
+  showToast,
+  isMobileMenuOpen,
+  onToggleMobileMenu
 }) {
   const [showProjectMenu, setShowProjectMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -34,45 +38,57 @@ export default function Header({
   return (
     <header className="bg-[#1B365D] text-white border-b border-[#0F2139] sticky top-0 z-40">
       {/* Official Government of Maharashtra Top Strip */}
-      <div className="bg-[#0F2139] px-5 py-1 text-[12px] text-slate-300 flex items-center justify-between border-b border-slate-700/60">
-        <div className="flex items-center gap-2.5">
-          <span className="font-semibold tracking-wide text-white">GOVERNMENT OF MAHARASHTRA</span>
-          <span className="text-slate-500">|</span>
-          <span className="text-slate-300">Department of Industries — Single Window Services</span>
+      <div className="bg-[#0F2139] px-3 sm:px-5 py-1 text-[11px] sm:text-[12px] text-slate-300 flex flex-wrap items-center justify-between gap-1 border-b border-slate-700/60">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 truncate">
+          <span className="font-semibold tracking-wide text-white truncate">GOVT OF MAHARASHTRA</span>
+          <span className="text-slate-500 hidden sm:inline">|</span>
+          <span className="text-slate-300 hidden md:inline truncate">Dept of Industries — Single Window Services</span>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="bg-[#92400E] text-amber-100 px-2 py-0.5 rounded-[2px] text-[11px] font-semibold tracking-wide uppercase border border-amber-600/40">
-            Prototype Environment
+        <div className="flex items-center gap-2">
+          <span className="bg-[#92400E] text-amber-100 px-1.5 sm:px-2 py-0.2 sm:py-0.5 rounded-[2px] text-[10px] sm:text-[11px] font-semibold tracking-wide uppercase border border-amber-600/40">
+            Prototype
           </span>
-          <span className="text-slate-400">SIH 2026</span>
+          <span className="text-slate-400 text-[11px] sm:text-xs">SIH 2026</span>
         </div>
       </div>
 
       {/* Main Administrative Navigation Bar */}
-      <div className="px-5 py-3 flex items-center justify-between gap-4">
-        {/* Brand & Portal Name */}
-        <div 
-          className="flex items-center gap-3.5 cursor-pointer select-none" 
-          onClick={() => onNavigate('landing')}
-          title="Return to Portal Landing Screen"
-        >
-          <div className="w-10 h-10 bg-white rounded-[3px] flex items-center justify-center text-[#1B365D] font-bold shadow-sm border border-slate-200">
-            <Building2 className="w-6 h-6 text-[#1B365D]" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2.5">
-              <span className="font-bold text-xl tracking-tight text-white font-sans">INDUSTRIA</span>
-              <span className="bg-[#142947] text-slate-200 text-[11.5px] font-medium px-2 py-0.5 rounded-[2px] border border-blue-900">
-                Industrial Facilitation Portal
-              </span>
+      <div className="px-3 sm:px-5 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-4">
+        {/* Brand & Hamburger Menu */}
+        <div className="flex items-center gap-2 sm:gap-3.5">
+          {/* Mobile Hamburger Toggle Button */}
+          <button
+            onClick={onToggleMobileMenu}
+            className="md:hidden p-1.5 rounded-[3px] bg-[#142947] hover:bg-[#0F2139] text-white border border-blue-900 flex items-center justify-center transition-colors"
+            aria-label="Toggle Navigation Menu"
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+
+          {/* Logo & Brand Name */}
+          <div 
+            className="flex items-center gap-2 sm:gap-3 cursor-pointer select-none" 
+            onClick={() => onNavigate('landing')}
+            title="Return to Portal Landing Screen"
+          >
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-[3px] flex items-center justify-center text-[#1B365D] font-bold shadow-xs border border-slate-200 shrink-0">
+              <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-[#1B365D]" />
             </div>
-            <p className="text-[12.5px] text-slate-300 leading-tight mt-0.5">
-              Single-Window Approvals & Statutory Compliance
-            </p>
+            <div>
+              <div className="flex items-center gap-1.5 sm:gap-2.5">
+                <span className="font-bold text-lg sm:text-xl tracking-tight text-white font-sans">INDUSTRIA</span>
+                <span className="hidden sm:inline bg-[#142947] text-slate-200 text-[11px] font-medium px-2 py-0.5 rounded-[2px] border border-blue-900">
+                  Single Window
+                </span>
+              </div>
+              <p className="text-[11px] sm:text-[12.5px] text-slate-300 leading-tight mt-0.5 hidden xs:block truncate max-w-[200px] sm:max-w-none">
+                Single-Window Approvals & Compliance
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Center: Current Entity / Jurisdiction Context */}
+        {/* Center: Current Entity Context (Visible on lg screens) */}
         <div className="hidden lg:flex items-center gap-3">
           {currentRole === 'entrepreneur' ? (
             <div className="relative">
@@ -83,10 +99,10 @@ export default function Header({
               >
                 <div className="w-2 h-2 rounded-full bg-emerald-400"></div>
                 <div className="text-left">
-                  <div className="font-semibold text-white truncate max-w-[240px] text-[13px]">
+                  <div className="font-semibold text-white truncate max-w-[220px] text-[13px]">
                     {activeProject?.name || "ABC Food Processing Pvt Ltd"}
                   </div>
-                  <div className="text-[11.5px] text-slate-300">
+                  <div className="text-[11px] text-slate-300">
                     {activeProject?.location?.district || "Pune"}, Maharashtra • {activeProject?.industry}
                   </div>
                 </div>
@@ -139,24 +155,24 @@ export default function Header({
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <div>
                 <span className="font-semibold text-white text-[13px]">Department Scrutiny Console</span>
-                <span className="text-slate-300 text-[11.5px] block">Government of Maharashtra Officer Workspace</span>
+                <span className="text-slate-300 text-[11px] block">Government of Maharashtra Officer Workspace</span>
               </div>
             </div>
           )}
         </div>
 
         {/* Right Side: Role Switcher & System Utilities */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
           {/* Institutional Role Switcher Tabs */}
-          <div className="bg-[#0F2139] p-1 rounded-[3px] border border-slate-700 flex items-center text-xs">
+          <div className="bg-[#0F2139] p-0.5 sm:p-1 rounded-[3px] border border-slate-700 flex items-center text-xs">
             <button
               onClick={() => {
                 onRoleChange('entrepreneur');
                 showToast?.("Switched to Entrepreneur Workspace", "info");
               }}
-              className={`px-3 py-1 rounded-[2px] font-semibold text-[13px] transition-all ${
+              className={`px-2 sm:px-3 py-1 rounded-[2px] font-semibold text-[12px] sm:text-[13px] transition-all ${
                 currentRole === 'entrepreneur'
-                  ? 'bg-white text-[#1B365D] shadow-sm'
+                  ? 'bg-white text-[#1B365D] shadow-xs'
                   : 'text-slate-300 hover:text-white'
               }`}
             >
@@ -167,13 +183,13 @@ export default function Header({
                 onRoleChange('government');
                 showToast?.("Switched to Government Officer Workspace", "info");
               }}
-              className={`px-3 py-1 rounded-[2px] font-semibold text-[13px] transition-all ${
+              className={`px-2 sm:px-3 py-1 rounded-[2px] font-semibold text-[12px] sm:text-[13px] transition-all ${
                 currentRole === 'government'
-                  ? 'bg-white text-[#1B365D] shadow-sm'
+                  ? 'bg-white text-[#1B365D] shadow-xs'
                   : 'text-slate-300 hover:text-white'
               }`}
             >
-              Government Officer
+              Officer
             </button>
           </div>
 
@@ -183,26 +199,26 @@ export default function Header({
               onResetData?.();
               showToast?.("Demo data restored to initial state", "info");
             }}
-            className="hidden sm:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white bg-[#142947] hover:bg-[#0F2139] px-2.5 py-1.5 rounded-[3px] border border-blue-900 transition-colors"
+            className="hidden md:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white bg-[#142947] hover:bg-[#0F2139] px-2.5 py-1.5 rounded-[3px] border border-blue-900 transition-colors"
             title="Reset Mock Data to Initial State"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            <span className="text-[12px]">Reset Demo</span>
+            <span className="text-[12px]">Reset</span>
           </button>
 
           {/* Notifications Dropdown */}
           <div className="relative">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="p-2 rounded-[3px] hover:bg-[#142947] text-slate-300 hover:text-white relative transition-colors"
+              className="p-1.5 sm:p-2 rounded-[3px] hover:bg-[#142947] text-slate-300 hover:text-white relative transition-colors"
               aria-label="View notifications"
             >
               <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-400 rounded-full"></span>
+              <span className="absolute top-1 right-1 w-2 h-2 bg-amber-400 rounded-full"></span>
             </button>
 
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 bg-white text-slate-900 rounded-[3px] shadow-xl border border-slate-300 py-1.5 z-50">
+              <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white text-slate-900 rounded-[3px] shadow-xl border border-slate-300 py-1.5 z-50">
                 <div className="px-4 py-2 border-b border-slate-200 flex items-center justify-between bg-slate-50">
                   <span className="font-bold text-xs text-[#1B365D]">Portal Alerts</span>
                   <span className="text-[11px] bg-red-100 text-red-800 px-1.5 py-0.5 rounded-[2px] font-semibold">1 Action Required</span>
@@ -226,7 +242,7 @@ export default function Header({
           {/* Help & Architecture Reference */}
           <button
             onClick={() => setShowHelpModal(true)}
-            className="p-2 rounded-[3px] hover:bg-[#142947] text-slate-300 hover:text-white transition-colors"
+            className="p-1.5 sm:p-2 rounded-[3px] hover:bg-[#142947] text-slate-300 hover:text-white transition-colors"
             title="System Architecture & Trust Principles"
           >
             <HelpCircle className="w-4 h-4" />
@@ -237,11 +253,11 @@ export default function Header({
       {/* Trust & Architecture Modal */}
       {showHelpModal && (
         <div className="fixed inset-0 bg-slate-900/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white text-slate-900 rounded-[4px] max-w-2xl w-full p-6 shadow-xl border border-slate-300 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white text-slate-900 rounded-[4px] max-w-2xl w-full p-5 sm:p-6 shadow-xl border border-slate-300 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-200">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-6 h-6 text-[#1B365D]" />
-                <h3 className="font-bold text-lg text-[#1B365D]">System Architecture & Governance Guidelines</h3>
+                <h3 className="font-bold text-base sm:text-lg text-[#1B365D]">System Architecture & Governance</h3>
               </div>
               <button 
                 onClick={() => setShowHelpModal(false)}
@@ -257,20 +273,17 @@ export default function Header({
               <div className="bg-slate-50 p-3.5 rounded-[3px] border border-slate-200 space-y-2 text-[13px]">
                 <h4 className="font-bold text-[#1B365D]">Core Governance Principles:</h4>
                 <ul className="list-disc pl-4 space-y-1.5 text-slate-700">
-                  <li><strong>Deterministic Rules:</strong> Approval requirements are computed directly against statutory criteria (Factories Act, Water/Air Acts, MRTP regulations).</li>
-                  <li><strong>Document Consistency Scrutiny:</strong> Simulates OCR verification across site drawings and lease deeds to eliminate unnecessary query delays.</li>
+                  <li><strong>Deterministic Rules:</strong> Approval requirements computed directly against statutory criteria (Factories Act, Water/Air Acts, MRTP regulations).</li>
+                  <li><strong>Document Consistency Scrutiny:</strong> Simulates OCR verification across site drawings and lease deeds to eliminate query delays.</li>
                   <li><strong>Parallel Workflow Mapping:</strong> Coordinates simultaneous departmental tracks following land allotment to reduce turnaround times.</li>
-                  <li><strong>Administrative Authority:</strong> Field inspection scheduling, technical scrutiny, and final clearance orders remain strictly with authorized government officers.</li>
+                  <li><strong>Administrative Authority:</strong> Field inspections, technical scrutiny, and sanctions remain strictly with authorized officers.</li>
                 </ul>
               </div>
-              <p className="text-[12px] text-slate-500 italic">
-                * Note: Timelines, department figures, and validations are simulated prototype data for demonstration purposes.
-              </p>
             </div>
             <div className="mt-5 pt-3 border-t border-slate-200 flex justify-end">
               <button
                 onClick={() => setShowHelpModal(false)}
-                className="bg-[#1B365D] text-white px-4 py-1.5 rounded-[3px] text-xs font-semibold hover:bg-[#142947]"
+                className="bg-[#1B365D] text-white px-4 py-2 rounded-[3px] text-xs font-semibold hover:bg-[#142947]"
               >
                 Close Guidance
               </button>

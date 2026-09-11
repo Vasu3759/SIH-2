@@ -57,6 +57,7 @@ export default function App() {
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [isDigiLockerOpen, setIsDigiLockerOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Toast Notification State
   const [toast, setToast] = useState(null);
@@ -241,6 +242,8 @@ export default function App() {
         onNavigate={handleNavigate}
         onResetData={handleResetData}
         showToast={showToast}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
 
       {/* Main Workspace Layout */}
@@ -251,6 +254,8 @@ export default function App() {
           currentRoute={currentRoute}
           onNavigate={handleNavigate}
           activeProject={activeProject}
+          isMobileMenuOpen={isMobileMenuOpen}
+          onCloseMobileMenu={() => setIsMobileMenuOpen(false)}
         />
 
         {/* Dynamic Page Content with Generous Enterprise Padding */}
