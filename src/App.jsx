@@ -5,6 +5,7 @@ import Toast from './components/Toast';
 import ApprovalDrawer from './components/ApprovalDrawer';
 import VerificationPanel from './components/VerificationPanel';
 import ApplicationTimeline from './components/ApplicationTimeline';
+import DigiLockerModal from './components/DigiLockerModal';
 
 // Pages
 import Landing from './pages/Landing';
@@ -55,6 +56,7 @@ export default function App() {
   const [selectedApproval, setSelectedApproval] = useState(null);
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [selectedApplication, setSelectedApplication] = useState(null);
+  const [isDigiLockerOpen, setIsDigiLockerOpen] = useState(false);
 
   // Toast Notification State
   const [toast, setToast] = useState(null);
@@ -87,6 +89,7 @@ export default function App() {
     setSelectedApproval(null);
     setSelectedDocument(null);
     setSelectedApplication(null);
+    setIsDigiLockerOpen(false);
   };
 
   // Document Issue Resolution Handler
@@ -141,6 +144,50 @@ export default function App() {
   const handleUploadSimulatedFile = (fileObj) => {
     const verified = simulateUploadVerification(fileObj);
     setDocumentsState(prev => [verified, ...prev]);
+  };
+
+  // Handle Ingestion of DigiLocker Documents
+  const handleDigiLockerFetch = (fetchedDocs) => {
+    const formattedDocs = fetchedDocs.map(item => ({
+      id: item.id || `doc-${Date.now()}`,
+      fileName: item.fileName,
+      documentType: item.docType || item.title,
+      category: item.category || 'Corporate',
+      source: 'DigiLocker',
+      issuer: item.issuer,
+      issuerCode: item.docCode,
+      uploadDate: '11 Sep 2026',
+      size: item.size || '650 KB',
+      status: 'Valid',
+      sha256Hash: item.sha256 || 'e7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8',
+      digitalSignature: {
+        status: 'VALID',
+        algorithm: 'SHA256withRSA (2048-bit)',
+        certIssuer: item.certIssuer || 'Government Sub-CA Certificate',
+        validUntil: '31 Dec 2028',
+        timestamp: '11 Sep 2026 21:50:00 IST'
+      },
+      piiProtection: {
+        dpdpCompliant: true,
+        maskedAadhaar: 'XXXX-XXXX-8821',
+        maskedPan: 'AAACA****F',
+        dataMinimization: 'Statutory Verification Only'
+      },
+      consentId: 'DEPA-CONSENT-2026-MH-9941',
+      extractedData: item.extractedData || {},
+      validations: [
+        { field: 'DigiLocker X.509 PKI Signature', status: 'PASS', message: `Cryptographically verified with ${item.issuer} public certificate` },
+        { field: 'Corporate Title Match', status: 'PASS', message: 'Matches registered entity name: ABC Food Processing Private Limited' },
+        { field: 'DPDP Act 2023 Compliance', status: 'PASS', message: 'PII tokens masked. Consent logged on immutable audit ledger.' }
+      ]
+    }));
+
+    // Merge without duplicating existing fileNames
+    setDocumentsState(prev => {
+      const existingNames = new Set(prev.map(p => p.fileName));
+      const newItems = formattedDocs.filter(f => !existingNames.has(f.fileName));
+      return [...newItems, ...prev];
+    });
   };
 
   // Navigation Handler
@@ -206,8 +253,8 @@ export default function App() {
           activeProject={activeProject}
         />
 
-        {/* Dynamic Page Content */}
-        <main className="flex-1 p-5 md:p-6 overflow-x-hidden min-w-0">
+        {/* Dynamic Page Content with Generous Enterprise Padding */}
+        <main className="flex-1 p-6 sm:p-7 md:p-8 lg:p-9 overflow-x-hidden min-w-0">
           {/* ENTREPRENEUR ROUTES */}
           {currentRole === 'entrepreneur' && (
             <>
@@ -271,6 +318,7 @@ export default function App() {
                   documents={documentsState}
                   onSelectDocument={(doc) => setSelectedDocument(doc)}
                   onUploadSimulatedFile={handleUploadSimulatedFile}
+                  onOpenDigiLocker={() => setIsDigiLockerOpen(true)}
                   showToast={showToast}
                 />
               )}
@@ -333,6 +381,7 @@ export default function App() {
                   onSelectCase={(c) => {
                     handleNavigate('gov-applications');
                   }}
+                  showToast={showToast}
                 />
               )}
 
@@ -389,6 +438,13 @@ export default function App() {
         onClose={() => setSelectedDocument(null)}
         onResolveIssue={handleResolveDocumentMismatch}
         project={activeProject}
+      />
+
+      <DigiLockerModal
+        isOpen={isDigiLockerOpen}
+        onClose={() => setIsDigiLockerOpen(false)}
+        onFetchSuccess={handleDigiLockerFetch}
+        showToast={showToast}
       />
 
       <ApplicationTimeline

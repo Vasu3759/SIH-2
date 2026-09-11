@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Building2, 
   Clock, 
@@ -7,7 +7,11 @@ import {
   FileText, 
   Users, 
   BarChart3, 
-  ChevronRight
+  ChevronRight,
+  Send,
+  RefreshCw,
+  ShieldAlert,
+  Sparkles
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -26,8 +30,22 @@ import {
   departmentApplicationsList 
 } from '../../data/departmentData';
 
-export default function GovernmentDashboard({ onNavigate, onSelectCase }) {
+export default function GovernmentDashboard({ onNavigate, onSelectCase, showToast }) {
   const delayedCases = departmentApplicationsList.filter(c => c.status === 'OVERDUE');
+  const [isEscalating, setIsEscalating] = useState(false);
+  const [isEscalated, setIsEscalated] = useState(false);
+  const [escalationRef, setEscalationRef] = useState(null);
+
+  const handleDispatchSlaNotice = () => {
+    setIsEscalating(true);
+    setTimeout(() => {
+      setIsEscalating(false);
+      setIsEscalated(true);
+      const refCode = `SECY-IND-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+      setEscalationRef(refCode);
+      showToast?.(`⚡ Urgent SLA Notice ${refCode} dispatched to MPCB Regional Officer! 48h resolution clock initiated.`, "success");
+    }, 700);
+  };
 
   return (
     <div className="space-y-5">
@@ -101,53 +119,94 @@ export default function GovernmentDashboard({ onNavigate, onSelectCase }) {
 
       {/* Main 2-Column: Bottleneck Detection & Processing Time Bar Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-        {/* Left: BOTTLENECK DETECTION ALERT PANEL */}
+        {/* Left: BOTTLENECK DETECTION ALERT PANEL (FEATURE 4: Interactive SLA Escalation) */}
         <div className="lg:col-span-6 bg-white rounded-[3px] border border-[#CBD5E1] shadow-[0_1px_2px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col justify-between">
-          <div className="p-4 bg-red-50 border-b border-red-200 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <AlertOctagon className="w-5 h-5 text-red-700 shrink-0" />
-              <h2 className="text-[14px] font-bold text-red-950 uppercase tracking-wider">
-                Current Bottleneck Alert
-              </h2>
-            </div>
-            <span className="text-[11px] bg-red-200 text-red-950 font-bold px-2 py-0.5 rounded-[2px] border border-red-300">
-              Action Required
-            </span>
-          </div>
-
-          <div className="p-5 space-y-4 text-xs">
-            <div>
-              <div className="text-[17px] font-bold text-slate-900">
-                {bottleneckSummary.department}
+          <div>
+            <div className={`p-4 border-b flex items-center justify-between transition-colors ${
+              isEscalated ? 'bg-amber-50 border-amber-200' : 'bg-red-50 border-red-200'
+            }`}>
+              <div className="flex items-center gap-2">
+                <AlertOctagon className={`w-5 h-5 shrink-0 ${isEscalated ? 'text-amber-800' : 'text-red-700'}`} />
+                <h2 className={`text-[14px] font-bold uppercase tracking-wider ${isEscalated ? 'text-amber-950' : 'text-red-950'}`}>
+                  {isEscalated ? "SLA Escalation Dispatched" : "Current Bottleneck Alert"}
+                </h2>
               </div>
-              <p className="text-[13px] text-red-800 font-bold mt-0.5">
-                {bottleneckSummary.summary}
-              </p>
+              <span className={`text-[11px] font-bold px-2 py-0.5 rounded-[2px] border ${
+                isEscalated 
+                  ? 'bg-amber-200 text-amber-950 border-amber-300' 
+                  : 'bg-red-200 text-red-950 border-red-300'
+              }`}>
+                {isEscalated ? "Notice Active (48h Clock)" : "Action Required"}
+              </span>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 text-center">
-              <div className="p-3 bg-slate-50 rounded-[2px] border border-slate-200">
-                <span className="text-slate-500 text-[11.5px] block font-semibold">Total Pending</span>
-                <span className="text-xl font-bold text-slate-900">{bottleneckSummary.pendingCases}</span>
+            <div className="p-5 space-y-4 text-xs">
+              <div>
+                <div className="text-[17px] font-bold text-slate-900">
+                  {bottleneckSummary.department}
+                </div>
+                <p className="text-[13px] text-red-800 font-bold mt-0.5">
+                  {bottleneckSummary.summary}
+                </p>
               </div>
-              <div className="p-3 bg-red-50 rounded-[2px] border border-red-200">
-                <span className="text-red-800 text-[11.5px] block font-semibold">SLA Overdue</span>
-                <span className="text-xl font-bold text-red-900">{bottleneckSummary.overdueCases}</span>
-              </div>
-              <div className="p-3 bg-amber-50 rounded-[2px] border border-amber-200">
-                <span className="text-amber-800 text-[11.5px] block font-semibold">Backlog Trend</span>
-                <span className="text-[13px] font-bold text-amber-900 mt-1 block">Increasing (+18%)</span>
-              </div>
-            </div>
 
-            <div className="space-y-2 text-slate-800 text-[13px] leading-relaxed">
-              <div className="p-3 bg-slate-50 rounded-[2px] border border-slate-200">
-                <strong className="text-slate-900 block mb-0.5">Root Cause Diagnostic:</strong>
-                {bottleneckSummary.rootCause}
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div className="p-3 bg-slate-50 rounded-[2px] border border-slate-200">
+                  <span className="text-slate-500 text-[11.5px] block font-semibold">Total Pending</span>
+                  <span className="text-xl font-bold text-slate-900">{bottleneckSummary.pendingCases}</span>
+                </div>
+                <div className="p-3 bg-red-50 rounded-[2px] border border-red-200">
+                  <span className="text-red-800 text-[11.5px] block font-semibold">SLA Overdue</span>
+                  <span className="text-xl font-bold text-red-900">{bottleneckSummary.overdueCases}</span>
+                </div>
+                <div className="p-3 bg-amber-50 rounded-[2px] border border-amber-200">
+                  <span className="text-amber-800 text-[11.5px] block font-semibold">Backlog Trend</span>
+                  <span className="text-[13px] font-bold text-amber-900 mt-1 block">Increasing (+18%)</span>
+                </div>
               </div>
-              <div className="p-3 bg-[#F0F4F8] rounded-[2px] border border-blue-200 text-[#1B365D]">
-                <strong className="block mb-0.5">Recommended Intervention:</strong>
-                {bottleneckSummary.recommendedIntervention}
+
+              <div className="space-y-2 text-slate-800 text-[13px] leading-relaxed">
+                <div className="p-3 bg-slate-50 rounded-[2px] border border-slate-200">
+                  <strong className="text-slate-900 block mb-0.5">Root Cause Diagnostic:</strong>
+                  {bottleneckSummary.rootCause}
+                </div>
+                <div className="p-3 bg-[#F0F4F8] rounded-[2px] border border-blue-200 text-[#1B365D]">
+                  <strong className="block mb-0.5">Recommended Intervention:</strong>
+                  {bottleneckSummary.recommendedIntervention}
+                </div>
+              </div>
+
+              {/* Interactive SLA Escalation Button Action */}
+              <div className="pt-1">
+                {isEscalated ? (
+                  <div className="p-3.5 bg-emerald-50 border border-emerald-300 rounded-[3px] text-xs space-y-1 text-emerald-950">
+                    <div className="flex items-center gap-1.5 font-bold text-[13px] text-emerald-900">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
+                      <span>Formal Statutory Notice Dispatched</span>
+                    </div>
+                    <p className="text-emerald-800 text-[12px] leading-normal font-mono">
+                      Ref: <strong>{escalationRef}</strong> • Dispatched to MPCB Member Secretary & Regional Officer. Priority scrutiny committee assigned.
+                    </p>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleDispatchSlaNotice}
+                    disabled={isEscalating}
+                    className="w-full bg-[#1B365D] hover:bg-[#142947] text-white py-2.5 px-3 rounded-[3px] text-[13px] font-bold flex items-center justify-center gap-2 shadow-sm transition-all"
+                  >
+                    {isEscalating ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>Dispatching Formal Notice to MPCB...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 text-amber-300" />
+                        <span>⚡ Dispatch Urgent SLA Notice to MPCB Regional Officer</span>
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
           </div>

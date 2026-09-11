@@ -8,11 +8,11 @@ export default {
     extend: {
       colors: {
         gov: {
-          bg: "#F4F6F9",
+          bg: "#F8FAFC",
           surface: "#FFFFFF",
           card: "#FFFFFF",
-          border: "#D1D5DB",
-          "border-dark": "#9CA3AF",
+          border: "#E2E8F0",
+          "border-dark": "#94A3B8",
           navy: {
             DEFAULT: "#1B365D",
             hover: "#142947",
@@ -53,23 +53,27 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['"Source Sans 3"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
-        mono: ['"IBM Plex Mono"', 'monospace']
+        sans: ['"Plus Jakarta Sans"', '"Inter"', '"Source Sans 3"', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', 'sans-serif'],
+        mono: ['"JetBrains Mono"', '"IBM Plex Mono"', 'monospace']
       },
       fontSize: {
-        'xs': ['13px', '18px'],
-        'sm': ['14.5px', '22px'],
-        'base': ['16px', '24px'],
-        'lg': ['18.5px', '26px'],
-        'xl': ['22px', '30px'],
-        '2xl': ['26px', '34px'],
-        '3xl': ['32px', '40px'],
+        '2xs': ['11px', '16px'],
+        'xs': ['12.5px', '18px'],
+        'sm': ['14px', '21px'],
+        'base': ['15.5px', '24px'],
+        'lg': ['17.5px', '26px'],
+        'xl': ['20px', '28px'],
+        '2xl': ['24px', '32px'],
+        '3xl': ['30px', '38px'],
       },
       borderRadius: {
-        DEFAULT: '3px',
-        'sm': '2px',
-        'md': '4px',
-        'lg': '6px',
+        DEFAULT: '4px',
+        'xs': '2px',
+        'sm': '3px',
+        'md': '6px',
+        'lg': '8px',
+        'xl': '12px',
       }
     },
   },
